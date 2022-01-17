@@ -21,6 +21,8 @@ ABlinkAbility::ABlinkAbility()
 
 void ABlinkAbility::Cast()
 {
+	Super::Cast();
+	
 	RootComponent->SetWorldLocation(FVector(150.f, 0.f, 0.f));
 	RootComponent->SetWorldRotation(FRotator(0,0,0));
 	Character = (AMystCoreCharacter*) UGameplayStatics::GetPlayerController(this, 0)->GetCharacter();
@@ -64,9 +66,6 @@ void ABlinkAbility::Cast()
 	FTimerHandle UnusedHandle;
 	
 	GetWorldTimerManager().SetTimer(UnusedHandle, this, &ABlinkAbility::Delay, 5.f, false);
-
-	//Sound
-	ExecuteAbilitySound();
 	
 	//FOV Animation
 	FOVDefault = Character->DefaultFOV;

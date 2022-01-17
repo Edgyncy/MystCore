@@ -4,6 +4,7 @@
 #include "ProjectileAbility.h"
 
 #include "Camera/CameraComponent.h"
+#include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "MystCore/MystCoreCharacter.h"
 
@@ -39,26 +40,49 @@ AProjectileAbility::AProjectileAbility()
 	
 	FXDestroy = CreateDefaultSubobject<UNiagaraComponent>("FX Instance Destroy");
 	FXDestroy->SetupAttachment(RootComponent);
+
+	FlySoundComponent = CreateDefaultSubobject<UAudioComponent>("Fly Sound Component");
+	FlySoundComponent->SetupAttachment(RootComponent);
+	
+	HitSoundComponent = CreateDefaultSubobject<UAudioComponent>("Hit Sound Component");
+	HitSoundComponent->SetupAttachment(RootComponent);
 }
 
 void AProjectileAbility::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	ExecuteFlySound();
 	CollisionComp->OnComponentHit.AddDynamic(this, &AProjectileAbility::ProjectileHit);
 }
 
 
 void AProjectileAbility::ProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	ExecuteHitSound();
+	StopFlySound();
 	FXComponent->Deactivate();
 	FXDestroy->Activate();
 }
 
+void AProjectileAbility::ExecuteHitSound()
+{
+		HitSoundComponent->Play();
+}
+
+void AProjectileAbility::ExecuteFlySound()
+{
+		FlySoundComponent->Play();
+}
+
+void AProjectileAbility::StopFlySound()
+{
+		FlySoundComponent->Stop();
+}
 
 void AProjectileAbility::Cast()
 {
-	
+	Super::Cast();
 }
 
 

@@ -25,6 +25,15 @@ protected:
 	virtual void Cast() override;
 
 	UFUNCTION()
+    virtual void ExecuteHitSound();
+
+	UFUNCTION()
+    virtual void StopFlySound();
+
+	UFUNCTION()
+    virtual void ExecuteFlySound();
+
+	UFUNCTION()
 	virtual void ProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
 public:
@@ -36,6 +45,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Movement)
 	UProjectileMovementComponent* ProjectileMovement;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Sounds)
+	UAudioComponent* HitSoundComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Sounds)
+	UAudioComponent* FlySoundComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Effects)
 	bool FXEnabled;
@@ -45,6 +60,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Effects)
 	UNiagaraComponent* FXDestroy;
+	
 
 	
 	

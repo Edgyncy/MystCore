@@ -49,7 +49,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Ability)
 	FAbilityInformation AbilityDetails;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Ability)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Sound)
 	USoundBase* AbilitySound;
 
 	UFUNCTION()

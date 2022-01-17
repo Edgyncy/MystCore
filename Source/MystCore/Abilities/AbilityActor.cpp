@@ -3,6 +3,7 @@
 
 #include "AbilityActor.h"
 
+#include "CastService.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -13,12 +14,10 @@ AAbilityActor::AAbilityActor()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-/** Don't Super() This XD**/
+/** Preparing for the Normal Casting**/
 void AAbilityActor::Cast()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Test Casting"));
-
-	FinishCasting();
+	ExecuteAbilitySound();
 }
 
 void AAbilityActor::FinishCasting()
