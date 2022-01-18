@@ -35,11 +35,14 @@ protected:
 
 	UFUNCTION()
 	virtual void ProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+	UFUNCTION()
+    virtual void ProjectileFinish(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 	
 public:
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Movement)
 	bool bDead = false;
-	
 
 	AProjectileAbility();
 

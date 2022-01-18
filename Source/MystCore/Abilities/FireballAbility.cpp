@@ -17,9 +17,10 @@ void AFireballAbility::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AFireballAbility::ProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void AFireballAbility::ProjectileFinish(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	Super::ProjectileHit(HitComponent, OtherActor, OtherComp, NormalImpulse, Hit);
+
+	Super::ProjectileFinish(HitComponent, OtherActor, OtherComp, NormalImpulse, Hit);
 	
 	TArray<AActor*> IgnoreActors;
 	//IgnoreActors.Add(Character);
