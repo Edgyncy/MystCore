@@ -9,6 +9,7 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnZeroHealth);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHealthUpdate);
 
 UCLASS(BlueprintType)
 class MYSTCORE_API UHealthComponent : public UActorComponent
@@ -21,8 +22,30 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnZeroHealth OnZeroHealth;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnZeroHealth OnHealthUpdate;
+
+	// Regeneration delay after character was damaged
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Regeration);
+	float HealthRegenerationDelay = 10.f;
+
+	// Is Character currently regenerating health
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Regeration);
+	bool bIsRegenerating = false;
+
+	// Regeneration speed of health (Health/Sec)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Regeneration);
+	float RegenerationSpeed = 1;
 
 protected:
+
+	// Timer that regenerates health
+	FTimerHandle RegenerationTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Regeneration);
+	bool bCanRegenerate = false;
+
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
@@ -31,6 +54,34 @@ protected:
 	
 	UFUNCTION()
 	void TakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
+
+	/** Sets bCanRegenerate bool which specifies ability of the character to regenerate health **/
+	UFUNCTION()
+	void SetCanRegenerate(bool CanRegenerate);
+
+	/** Adding Health **/
+	UFUNCTION()
+	void AddHealth(float Amount);
+
+	/** Removing Health **/
+	UFUNCTION()
+    void RemoveHealth(float Amount);
+
+	/** Reloads Regeneration Timer (If bCanRegenerate has been changed)**/
+	UFUNCTION()
+	void ReloadRegeneration();
+
+	/** Adding Health on constant Rate**/
+	UFUNCTION()
+    void RegenerationTimerFunction();
+
+	/** Stop regeneration timer **/
+	UFUNCTION()
+    void RegenerationStop();
+
+	/** Restart regeneration with delay (Example: Character was damaged) **/
+	UFUNCTION()
+	void RegenerationRestart(float &Delay);
 
 public:
 	
