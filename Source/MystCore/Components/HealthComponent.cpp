@@ -20,7 +20,6 @@ UHealthComponent::UHealthComponent()
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	Health = DefaultHealth;
 
 	AActor* Owner = GetOwner();
 	if(Owner)
@@ -33,7 +32,34 @@ void UHealthComponent::BeginPlay()
 		}
 	}
 	
+	ReloadRegeneration();
 }
+
+void UHealthComponent::AddHealth(float Amount)
+{
+	if(Amount == 0) return;
+	
+	float TempHealth = Health;
+	Health = FMath::Clamp(Health + Amount, 0.0f, DefaultHealth);
+	
+	if(Health == TempHealth) return;
+	
+	OnHealthUpdate.Broadcast();
+}
+
+void UHealthComponent::RemoveHealth(float Amount)
+{
+	if(Amount == 0) return;
+	
+	float TempHealth = Health;
+	Health = FMath::Clamp(Health - Amount, 0.0f, DefaultHealth);
+
+	if(Health == TempHealth) return;
+	
+	OnHealthUpdate.Broadcast();
+}
+
+
 
 void UHealthComponent::LandedThing(const FHitResult& Hit)
 {
@@ -54,13 +80,57 @@ void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDam
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("Damaged: %f"), Damage)
-	Health = FMath::Clamp(Health - Damage, 0.0f, DefaultHealth);
-
+	RemoveHealth(Damage);
+	RegenerationRestart(HealthRegenerationDelay);
+	
 	if(Health == 0)
 	{
 		OnZeroHealth.Broadcast();
 	}
 }
+
+void UHealthComponent::SetCanRegenerate(bool CanRegenerate)
+{
+	bCanRegenerate = CanRegenerate;
+	ReloadRegeneration();
+}
+
+void UHealthComponent::ReloadRegeneration()
+{
+	if(bCanRegenerate)
+	{
+		if(!bIsRegenerating) RegenerationRestart(HealthRegenerationDelay);
+	}else
+	{
+		RegenerationStop();
+	}
+}
+
+
+void UHealthComponent::RegenerationRestart(float &Delay)
+{
+	RegenerationStop();
+
+	bIsRegenerating = true;
+	GetOwner()->GetWorldTimerManager().SetTimer(RegenerationTimer, this, &UHealthComponent::RegenerationTimerFunction, 0.1f, true, Delay);
+}
+
+void UHealthComponent::RegenerationStop()
+{
+	bIsRegenerating = false;
+	if(RegenerationTimer.IsValid())
+	{
+		GetOwner()->GetWorldTimerManager().ClearTimer(RegenerationTimer);
+	}
+}
+
+void UHealthComponent::RegenerationTimerFunction()
+{
+	AddHealth(RegenerationSpeed / 10);
+}
+
+
+
 
 
 
