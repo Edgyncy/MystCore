@@ -59,10 +59,13 @@ void AProjectileAbility::BeginPlay()
 
 void AProjectileAbility::ProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+
 	ExecuteHitSound();
 	StopFlySound();
 	FXComponent->Deactivate();
 	FXDestroy->Activate();
+	ProjectileMovement->Deactivate();
+	
 }
 
 void AProjectileAbility::ExecuteHitSound()

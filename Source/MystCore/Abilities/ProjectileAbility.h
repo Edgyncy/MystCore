@@ -38,6 +38,9 @@ protected:
 	
 public:
 
+	bool bDead = false;
+	
+
 	AProjectileAbility();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Movement)

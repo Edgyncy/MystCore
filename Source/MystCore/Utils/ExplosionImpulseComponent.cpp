@@ -30,7 +30,7 @@ void UExplosionImpulseComponent::Explode(FExplosionImpulseInfo Info)
 	const bool bSweepHit = GetWorld()->SweepMultiByChannel(HitActors, Start,
 														   End, FQuat::Identity, ECC_WorldStatic, SphereCollision);
 
-	DrawDebugSphere(GetWorld(), Start, Info.Radius, 50, FColor::Orange, true);
+	//DrawDebugSphere(GetWorld(), Start, Info.Radius, 50, FColor::Orange, true);
 
 	if (bSweepHit)
 	{
