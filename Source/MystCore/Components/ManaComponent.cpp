@@ -10,7 +10,9 @@ UManaComponent::UManaComponent()
 
 void UManaComponent::RegenerationTimerFunction()
 {
-	RegenerateMana(RegenerationSpeed / 10);
+	Mana = FMath::Clamp(Mana + RegenerationSpeed / 10, 0.0f, DefaultMana);
+
+	OnManaUpdate.Broadcast();
 }
 
 void UManaComponent::SuckMana(float Amount)
