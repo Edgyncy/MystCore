@@ -80,9 +80,9 @@ void AProjectileAbility::StopFlySound()
 		FlySoundComponent->Stop();
 }
 
-void AProjectileAbility::Cast()
+void AProjectileAbility::Cast(ACharacter* CasterActor)
 {
-	Super::Cast();
+	Super::Cast(CasterActor);
 }
 
 

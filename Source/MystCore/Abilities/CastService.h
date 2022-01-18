@@ -50,7 +50,7 @@ public:
 	UCastService();
 
 	UFUNCTION()
-	void Cast(UWorld* world, FVector Location, FRotator Rotation);
+	void Cast(UWorld* world, ACharacter* CasterActor, FVector Location, FRotator Rotation);
 	
 	UFUNCTION()
 	void StartCooldown();

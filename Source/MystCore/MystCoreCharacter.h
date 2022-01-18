@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Abilities/AbilityActor.h"
 #include "Abilities/CastService.h"
 #include "Components/HealthComponent.h"
 #include "Components/ManaComponent.h"

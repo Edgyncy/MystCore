@@ -19,13 +19,14 @@ ABlinkAbility::ABlinkAbility()
 }
 
 
-void ABlinkAbility::Cast()
+void ABlinkAbility::Cast(ACharacter* CasterActor)
 {
-	Super::Cast();
+	Super::Cast(CasterActor);
 	
 	RootComponent->SetWorldLocation(FVector(150.f, 0.f, 0.f));
 	RootComponent->SetWorldRotation(FRotator(0,0,0));
-	Character = (AMystCoreCharacter*) UGameplayStatics::GetPlayerController(this, 0)->GetCharacter();
+	
+	Character = (AMystCoreCharacter*) Caster;
 	
 	FAttachmentTransformRules TransformRules = FAttachmentTransformRules(EAttachmentRule::KeepRelative, true);
 	

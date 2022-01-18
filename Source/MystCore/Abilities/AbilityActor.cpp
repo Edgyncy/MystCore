@@ -15,8 +15,10 @@ AAbilityActor::AAbilityActor()
 }
 
 /** Preparing for the Normal Casting**/
-void AAbilityActor::Cast()
+void AAbilityActor::Cast(ACharacter* CasterActor)
 {
+	Caster = CasterActor;
+	
 	ExecuteAbilitySound();
 }
 
@@ -31,8 +33,6 @@ void AAbilityActor::FinishCasting()
 void AAbilityActor::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//Cast();
 }
 
 void AAbilityActor::ExecuteAbilitySound()

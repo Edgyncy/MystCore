@@ -11,7 +11,7 @@ UCastService::UCastService()
 	
 }
 
-void UCastService::Cast(UWorld* World, FVector Location, FRotator Rotation)
+void UCastService::Cast(UWorld* World, ACharacter* CasterActor, FVector Location, FRotator Rotation)
 {
 	OnPreCast.Broadcast();
 	
@@ -34,7 +34,7 @@ void UCastService::Cast(UWorld* World, FVector Location, FRotator Rotation)
 	AbilityActor->OnFinishCast.AddDynamic(this, &UCastService::StartCooldown);
 	CooldownTime = AbilityActor->AbilityDetails.Cooldown;
 	
-	AbilityActor->Cast();
+	AbilityActor->Cast(CasterActor);
 
 	IsAvailable = false;
 	

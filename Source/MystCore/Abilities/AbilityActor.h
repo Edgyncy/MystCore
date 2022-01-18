@@ -44,7 +44,7 @@ public:
 	
 	// Sets default values for this actor's properties
 	AAbilityActor();
-
+	
 	/** Ability Details like: Name, Description etc.**/
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Ability)
 	FAbilityInformation AbilityDetails;
@@ -53,7 +53,7 @@ public:
 	USoundBase* AbilitySound;
 
 	UFUNCTION()
-	virtual void Cast();
+	virtual void Cast(ACharacter* CasterActor);
 
 	UFUNCTION()
     virtual void ExecuteAbilitySound();
@@ -62,6 +62,8 @@ public:
 	void FinishCasting();
 
 protected:
+
+	ACharacter* Caster;
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

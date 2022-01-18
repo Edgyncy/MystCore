@@ -21,7 +21,7 @@ class MYSTCORE_API ABlinkAbility : public AAbilityActor
 public:
 	ABlinkAbility();
 	
-	virtual void Cast() override;
+	virtual void Cast(ACharacter* CasterActor) override;
 
 	virtual void Tick(float DeltaSeconds) override;
 	

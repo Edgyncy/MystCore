@@ -22,7 +22,7 @@ protected:
 
 	virtual void BeginPlay() override;
 	
-	virtual void Cast() override;
+	virtual void Cast(ACharacter* CasterActor) override;
 
 	UFUNCTION()
     virtual void ExecuteHitSound();

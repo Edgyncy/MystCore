@@ -131,13 +131,15 @@ void AMystCoreCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 void AMystCoreCharacter::OnPrimaryAbility()
 {
 	//Abilities things
-	PrimaryAbilityService->Cast(GetWorld(), GetFirstPersonCameraComponent()->GetComponentLocation(), GetFirstPersonCameraComponent()->GetComponentRotation());
+	PrimaryAbilityService->Cast(GetWorld(), this,
+		GetFirstPersonCameraComponent()->GetComponentLocation(), GetFirstPersonCameraComponent()->GetComponentRotation());
 }
 
 void AMystCoreCharacter::OnSecondaryAbility()
 {
 	//Abilities things
-	SecondaryAbilityService->Cast(GetWorld(), GetFirstPersonCameraComponent()->GetComponentLocation(), GetFirstPersonCameraComponent()->GetComponentRotation());
+	SecondaryAbilityService->Cast(GetWorld(), this,
+		GetFirstPersonCameraComponent()->GetComponentLocation(), GetFirstPersonCameraComponent()->GetComponentRotation());
 }
 
 void AMystCoreCharacter::AdditionalJump()
