@@ -29,8 +29,11 @@ void AFireballAbility::ProjectileHit(UPrimitiveComponent* HitComponent, AActor* 
 	FExplosionImpulseInfo Info;
 	Info.Radius = ExplosionRadius;
 	Info.Strength = ExplosionImpulseStrength;
+
+	FVector ExplosionLocation = Hit.Location;
+	ExplosionLocation.Z += 30.0f;
 	
-	AExplosionImpulse::CreateAndExplode(GetWorld(), Hit.Location, Info);
+	AExplosionImpulse::CreateAndExplode(GetWorld(), ExplosionLocation, Info);
 	
 	UGameplayStatics::ApplyRadialDamage(this, ExplosionDamage,
 		Hit.Location, ExplosionRadius, nullptr,

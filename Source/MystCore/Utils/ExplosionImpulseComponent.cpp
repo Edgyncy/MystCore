@@ -3,6 +3,7 @@
 
 #include "ExplosionImpulseComponent.h"
 
+#include "DrawDebugHelpers.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/PawnMovementComponent.h"
 
@@ -17,29 +18,29 @@ UExplosionImpulseComponent::UExplosionImpulseComponent()
 }
 
 
-// Called when the game starts
-void UExplosionImpulseComponent::BeginPlay()
+void UExplosionImpulseComponent::Explode(FExplosionImpulseInfo Info)
 {
-	Super::BeginPlay();
-
 	TArray<FHitResult> HitActors;
 	FVector Start = GetComponentLocation();
 	FVector End = Start;
 
 
-	FCollisionShape ShpereCollision = FCollisionShape::MakeSphere(Info.Radius);
+	FCollisionShape SphereCollision = FCollisionShape::MakeSphere(Info.Radius);
 
 	const bool bSweepHit = GetWorld()->SweepMultiByChannel(HitActors, Start,
-	                                                       End, FQuat::Identity, ECC_WorldStatic, ShpereCollision);
+														   End, FQuat::Identity, ECC_WorldStatic, SphereCollision);
+
+	DrawDebugSphere(GetWorld(), Start, Info.Radius, 50, FColor::Orange, true);
 
 	if (bSweepHit)
 	{
 		for (auto& HitActor : HitActors)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Character Hit"))
 			UStaticMeshComponent* Receiver = Cast<UStaticMeshComponent>(HitActor.GetActor()->GetRootComponent());
 			if (Receiver)
 			{
-				Receiver->AddRadialImpulse(Start, Info.Radius, Info.Strength, RIF_Constant, true);
+				Receiver->AddRadialImpulse(Start, Info.Radius, Info.Strength, RIF_Linear, true);
 			}
 			else
 			{
@@ -47,7 +48,7 @@ void UExplosionImpulseComponent::BeginPlay()
 				if (CharacterReceiver)
 				{
 					CharacterReceiver->GetMovementComponent()->AddRadialImpulse(
-						Start, Info.Radius, Info.Strength, RIF_Constant, true);
+						Start, Info.Radius, Info.Strength, RIF_Linear, true);
 				}
 			}
 		}

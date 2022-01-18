@@ -29,11 +29,7 @@ public:
 	// Sets default values for this component's properties
 	UExplosionImpulseComponent();
 	
-	FExplosionImpulseInfo Info;
-
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+	void Explode(FExplosionImpulseInfo Info);
 
 public:
 };

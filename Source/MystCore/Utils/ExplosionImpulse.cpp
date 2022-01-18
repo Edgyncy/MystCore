@@ -12,6 +12,8 @@ AExplosionImpulse::AExplosionImpulse()
 
 	ExplosionImpulseComponent = CreateDefaultSubobject<UExplosionImpulseComponent>("Explosion Component");
 	ExplosionImpulseComponent->SetAutoActivate(false);
+
+	RootComponent = ExplosionImpulseComponent;
 }
 
 // Called when the game starts or when spawned
@@ -20,18 +22,18 @@ void AExplosionImpulse::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AExplosionImpulse::CreateAndExplode(UWorld* World, FVector Location, FExplosionImpulseInfo Info)
+void AExplosionImpulse::CreateAndExplode(UWorld* World, FVector Location, FExplosionImpulseInfo &Info)
 {
 	AExplosionImpulse* Impulse = (AExplosionImpulse*) World->SpawnActor(StaticClass(), &Location);
-	Impulse->ExplosionImpulseComponent->Info = Info;
 	
-	Impulse->Explode();
+	Impulse->Explode(Info);
 }
 
 
-void AExplosionImpulse::Explode()
+void AExplosionImpulse::Explode(FExplosionImpulseInfo &Info)
 {
 	ExplosionImpulseComponent->Activate();
+	ExplosionImpulseComponent->Explode(Info);
 	Destroy();
 }
 

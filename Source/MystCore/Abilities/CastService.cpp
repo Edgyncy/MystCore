@@ -47,8 +47,6 @@ void UCastService::StartCooldown()
 	
 	IsAvailable = false;
 	EstimatedTime = CooldownTime;
-
-	UE_LOG(LogTemp, Warning, TEXT("Starting Timer.."));
 	CurrentWorld->GetTimerManager().SetTimer(UpdateTimer, this, &UCastService::UpdateCooldown, CooldownUpdateRate, true, 0.0f);
 	
 	OnCooldownStart.Broadcast();
@@ -62,8 +60,6 @@ void UCastService::UpdateCooldown()
 	{
 		EndCooldown();
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("Estimated Timeeeeee: %f"), EstimatedTime)
 	OnCooldownUpdate.Broadcast(EstimatedTime, CooldownTime);
 }
 

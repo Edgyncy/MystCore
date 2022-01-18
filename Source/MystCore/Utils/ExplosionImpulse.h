@@ -19,9 +19,9 @@ public:
 	UPROPERTY(EditAnywhere);
 	UExplosionImpulseComponent* ExplosionImpulseComponent;
 
-	static void CreateAndExplode(UWorld* World, FVector Location, FExplosionImpulseInfo Info);
+	static void CreateAndExplode(UWorld* World, FVector Location, FExplosionImpulseInfo &Info);
 
-	void Explode();
+	void Explode(FExplosionImpulseInfo &Info);
 	
 protected:
 	// Called when the game starts or when spawned
