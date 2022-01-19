@@ -20,6 +20,8 @@ class MYSTCORE_API AProjectileAbility : public AAbilityActor
 
 protected:
 
+	
+
 	virtual void BeginPlay() override;
 	
 	virtual void Cast(ACharacter* CasterActor) override;
@@ -34,6 +36,9 @@ protected:
     virtual void ExecuteFlySound();
 
 	UFUNCTION()
+    virtual void ProjectileDestroy();
+
+	UFUNCTION()
 	virtual void ProjectileHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	UFUNCTION()
@@ -41,6 +46,7 @@ protected:
 	
 public:
 
+	/** Is Projectile Finished all things */
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category=Movement)
 	bool bDead = false;
 
@@ -51,6 +57,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Movement)
 	UProjectileMovementComponent* ProjectileMovement;
+
+	/** Life after projectile finished all things (Important for Explosion FX) */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Movement)
+	float LifeAfterFinish;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Sounds)
 	UAudioComponent* HitSoundComponent;
@@ -66,8 +76,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Effects)
 	UNiagaraComponent* FXDestroy;
-	
-
 	
 	
 };

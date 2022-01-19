@@ -33,7 +33,7 @@ AProjectileAbility::AProjectileAbility()
 	ProjectileMovement->bShouldBounce = true;
 
 	// Die after 3 seconds by default
-	InitialLifeSpan = 3.0f;
+	InitialLifeSpan = 0.0f;
 	
 	FXComponent = CreateDefaultSubobject<UNiagaraComponent>("FX Instance Default");
 	FXComponent->SetupAttachment(RootComponent);
@@ -69,8 +69,20 @@ void AProjectileAbility::ProjectileFinish(UPrimitiveComponent* HitComponent, AAc
 	ExecuteHitSound();
 	StopFlySound();
 	FXComponent->Deactivate();
+	CollisionComp->BodyInstance.SetCollisionProfileName("NoCollision");
 	FXDestroy->Activate();
 	ProjectileMovement->Deactivate();
+
+	if(LifeAfterFinish >= 0)
+	{
+		FTimerHandle UnusedHandle;
+		GetWorldTimerManager().SetTimer(UnusedHandle, this, &AProjectileAbility::ProjectileDestroy, LifeAfterFinish, false, LifeAfterFinish);
+	}
+}
+
+void AProjectileAbility::ProjectileDestroy()
+{
+	Destroy();
 }
 
 
