@@ -100,6 +100,9 @@ void AMystCoreCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	// Bind jump events
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMystCoreCharacter::AdditionalJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+
+	//
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMystCoreCharacter::OnFire);
 	
 	//
 	PlayerInputComponent->BindAction("SwitchWeaponNext", IE_Pressed, this, &AMystCoreCharacter::SwitchWeaponNext);
@@ -123,6 +126,12 @@ void AMystCoreCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	PlayerInputComponent->BindAction("PrimaryAbility", IE_Pressed, this, &AMystCoreCharacter::OnPrimaryAbility);
 	PlayerInputComponent->BindAction("SecondaryAbility", IE_Pressed, this, &AMystCoreCharacter::OnSecondaryAbility);
 }
+
+void AMystCoreCharacter::OnFire()
+{
+	CurrentWeapon->Fire();
+}
+
 
 void AMystCoreCharacter::SwitchWeaponNext()
  {
@@ -160,9 +169,9 @@ bool AMystCoreCharacter::ChangeWeapon(int32 WeaponIndex)
 		{
 			CurrentWeapon = WeaponActors[0];
 		}
-		CurrentWeapon->SetActorHiddenInGame(true);
+		CurrentWeapon->SetActiveWeapon(false);
 		CurrentWeapon = DifferentWeapon;
-		CurrentWeapon->SetActorHiddenInGame(false);
+		CurrentWeapon->SetActiveWeapon(true);
 
 		CurrentWeaponIndex = WeaponIndex;
 

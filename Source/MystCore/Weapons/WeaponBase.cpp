@@ -15,7 +15,7 @@ AWeaponBase::AWeaponBase()
 	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>("Skeletal Mesh Component");
 	SkeletalMesh->SetupAttachment(RootComponent);
 
-	
+	SkeletalMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	
 }
 
@@ -25,6 +25,19 @@ void AWeaponBase::BeginPlay()
 	Super::BeginPlay();
 	
 }
+
+void AWeaponBase::SetActiveWeapon(bool Val)
+{
+	bIsActive = Val;
+	SetActorHiddenInGame(!Val);
+}
+
+void AWeaponBase::Fire()
+{
+	OnFire.Broadcast();
+}
+
+
 
 // Called every frame
 void AWeaponBase::Tick(float DeltaTime)

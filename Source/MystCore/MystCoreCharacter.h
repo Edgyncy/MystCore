@@ -137,6 +137,8 @@ protected:
 	/** Switch Weapon Next */
 	void SwitchWeaponPrevious();
 
+	void OnFire();
+
 	bool ChangeWeapon(int32 WeaponIndex);
 	
 	/** Switch Weapon Next */

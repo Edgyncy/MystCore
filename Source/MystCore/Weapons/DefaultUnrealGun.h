@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "WeaponBase.h"
 #include "GameFramework/Actor.h"
+#include "MystCore/MystCoreProjectile.h"
 #include "DefaultUnrealGun.generated.h"
 
 UCLASS()
@@ -16,6 +17,9 @@ public:
 	// Sets default values for this actor's properties
 	ADefaultUnrealGun();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AMystCoreProjectile> ProjectileClass = AMystCoreProjectile::StaticClass() ;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -23,4 +27,6 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	virtual void Fire() override;
 };
