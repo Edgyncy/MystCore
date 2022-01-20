@@ -9,17 +9,19 @@
 
 AMystCoreHUD::AMystCoreHUD()
 {
+	/*
 	// Set the crosshair texture
 	static ConstructorHelpers::FObjectFinder<UTexture2D> CrosshairTexObj(TEXT("/Game/Characters/FirstPerson/Textures/FirstPersonCrosshair"));
 	CrosshairTex = CrosshairTexObj.Object;
-	
+	*/
 }
 
 
 void AMystCoreHUD::DrawHUD()
 {
 	Super::DrawHUD();
-
+	/*
+	//
 	// Draw very simple crosshair
 
 	// find center of the Canvas
@@ -33,4 +35,6 @@ void AMystCoreHUD::DrawHUD()
 	FCanvasTileItem TileItem( CrosshairDrawPosition, CrosshairTex->Resource, FLinearColor::White);
 	TileItem.BlendMode = SE_BLEND_Translucent;
 	Canvas->DrawItem( TileItem );
+
+	*/
 }

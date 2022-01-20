@@ -4,6 +4,7 @@
 #include "EnemyCharacter.h"
 
 #include "EnemyAIController.h"
+#include "MystCore/MystCoreCharacter.h"
 
 // Sets default values
 AEnemyCharacter::AEnemyCharacter()
@@ -22,8 +23,20 @@ AEnemyCharacter::AEnemyCharacter()
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	OnTakeAnyDamage.AddDynamic(this, &AEnemyCharacter::OnTakeDamage);
 	
 }
+
+void AEnemyCharacter::OnTakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
+{
+	AMystCoreCharacter* MSCharacter = Cast<AMystCoreCharacter>(InstigatedBy->GetCharacter());
+	if(MSCharacter)
+	{
+		MSCharacter->OnDealDamage.Broadcast(Damage, this);
+	}
+}
+
 
 // Called every frame
 void AEnemyCharacter::Tick(float DeltaTime)

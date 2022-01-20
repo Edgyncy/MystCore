@@ -7,6 +7,7 @@
 #include "Components/HealthComponent.h"
 #include "Components/ManaComponent.h"
 #include "GameFramework/Character.h"
+#include "Weapons/WeaponBase.h"
 #include "MystCoreCharacter.generated.h"
 
 class UAbilityClass;
@@ -18,7 +19,9 @@ class UMotionControllerComponent;
 class UAnimMontage;
 class USoundBase;
 
-UCLASS(config=Game)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDealDamage, float, DamageAmount, AActor*, Victim);
+
+UCLASS(BlueprintType, config=Game)
 class AMystCoreCharacter : public ACharacter
 {
 	GENERATED_BODY()
@@ -26,14 +29,6 @@ class AMystCoreCharacter : public ACharacter
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
 	UPROPERTY(VisibleDefaultsOnly, Category=Mesh)
 	USkeletalMeshComponent* Mesh1P;
-
-	/** Gun mesh: 1st person view (seen only by self) */
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	USkeletalMeshComponent* FP_Gun;
-
-	/** Location on gun mesh where projectiles should spawn. */
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
-	USceneComponent* FP_MuzzleLocation;
 
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -50,6 +45,12 @@ class AMystCoreCharacter : public ACharacter
 public:
 	AMystCoreCharacter();
 
+	/* Events */
+
+	/* On Character Deal Damage (should be broadcasted outside this class wtf0 */
+	UPROPERTY(BlueprintAssignable)
+	FOnDealDamage OnDealDamage;
+
 protected:
 	virtual void BeginPlay();
 	
@@ -57,9 +58,23 @@ protected:
 
 public:
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Weapon)
+	int32 CurrentWeaponIndex;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Weapon)
+	AWeaponBase* CurrentWeapon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Weapon)
+	TArray<TSubclassOf<AWeaponBase>> WeaponsAvailable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Weapon)
+	FName SocketName = FName("s_weaponSocket");
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Weapon)
+	TArray<AWeaponBase*> WeaponActors;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float DefaultFOV = 110;
-	
 
 	/** Player's Health */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -92,12 +107,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
-
-	
-	/** Gun muzzle's offset from the characters location */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
-	FVector GunOffset;
-
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category=Projectile)
 	TSubclassOf<class AMystCoreProjectile> ProjectileClass;
@@ -116,15 +125,22 @@ public:
 
 protected:
 	
-	/** Fires a projectile. */
-	void OnFire();
-
-	
 	/** Uses Primary Ability. */
 	void OnPrimaryAbility();
 
 	/** Uses Secondary Ability. */
 	void OnSecondaryAbility();
+
+	/** Switch Weapon Next */
+	void SwitchWeaponNext();
+
+	/** Switch Weapon Next */
+	void SwitchWeaponPrevious();
+
+	bool ChangeWeapon(int32 WeaponIndex);
+	
+	/** Switch Weapon Next */
+	void SwitchWeaponNumber(float Val);
 	
 
 	/** Handles moving forward/backward */

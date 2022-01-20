@@ -48,24 +48,6 @@ AMystCoreCharacter::AMystCoreCharacter()
 	Mesh1P->CastShadow = false;
 	Mesh1P->SetRelativeRotation(FRotator(1.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-0.5f, -4.4f, -155.7f));
-
-	// Create a gun mesh component
-	FP_Gun = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FP_Gun"));
-	FP_Gun->SetOnlyOwnerSee(false); // otherwise won't be visible in the multiplayer
-	FP_Gun->bCastDynamicShadow = false;
-	FP_Gun->CastShadow = false;
-	// FP_Gun->SetupAttachment(Mesh1P, TEXT("GripPoint"));
-	FP_Gun->SetupAttachment(RootComponent);
-
-	FP_MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
-	FP_MuzzleLocation->SetupAttachment(FP_Gun);
-	FP_MuzzleLocation->SetRelativeLocation(FVector(0.2f, 48.4f, -10.6f));
-
-	// Default offset from the character location for projectiles to spawn
-	GunOffset = FVector(100.0f, 0.0f, 10.0f);
-
-	// Note: The ProjectileClass and the skeletal mesh/anim blueprints for Mesh1P, FP_Gun, and VR_Gun 
-	// are set in the derived blueprint asset named MyCharacter to avoid direct content references in C++.
 }
 
 void AMystCoreCharacter::PostInitProperties()
@@ -83,16 +65,27 @@ void AMystCoreCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
+	// Setup Weapons
+
+	for(auto &WeaponClass : WeaponsAvailable)
+	{
+		AWeaponBase* WeaponBase = GetWorld()->SpawnActor<AWeaponBase>(WeaponClass);
+		WeaponBase->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, SocketName);
+		WeaponBase->SetHidden(true);
+		
+		WeaponActors.Add(WeaponBase);
+	}
+
+	ChangeWeapon(0);
+	
+	//
+
 	GetFirstPersonCameraComponent()->SetFieldOfView(DefaultFOV);
 	
 	PrimaryAbilityService->AbilityClass = PrimaryAbilityClass;
 	SecondaryAbilityService->AbilityClass = SecondaryAbilityClass;
 
 	LandedDelegate.AddDynamic(this, &AMystCoreCharacter::OnLandedThing);
-
-	//Attach gun mesh component to Skeleton, doing it here because the skeleton is not yet created in the constructor
-	FP_Gun->AttachToComponent(Mesh1P, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true),
-	                          TEXT("GripPoint"));
 	
 }
 
@@ -107,10 +100,13 @@ void AMystCoreCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	// Bind jump events
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMystCoreCharacter::AdditionalJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-
-	// Bind fire event
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMystCoreCharacter::OnFire);
-
+	
+	//
+	PlayerInputComponent->BindAction("SwitchWeaponNext", IE_Pressed, this, &AMystCoreCharacter::SwitchWeaponNext);
+	PlayerInputComponent->BindAction("SwitchWeaponPrevious", IE_Pressed, this, &AMystCoreCharacter::SwitchWeaponPrevious);
+	
+	PlayerInputComponent->BindAxis("SwitchWeapon", this, &AMystCoreCharacter::SwitchWeaponNumber);
+	
 	// Bind movement events
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMystCoreCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMystCoreCharacter::MoveRight);
@@ -126,6 +122,61 @@ void AMystCoreCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	//Abilities
 	PlayerInputComponent->BindAction("PrimaryAbility", IE_Pressed, this, &AMystCoreCharacter::OnPrimaryAbility);
 	PlayerInputComponent->BindAction("SecondaryAbility", IE_Pressed, this, &AMystCoreCharacter::OnSecondaryAbility);
+}
+
+void AMystCoreCharacter::SwitchWeaponNext()
+ {
+ 	UE_LOG(LogTemp, Warning, TEXT("+1"));
+ 	if(CurrentWeapon)
+ 	{
+ 		if(!ChangeWeapon(CurrentWeaponIndex + 1))
+ 		{
+ 				ChangeWeapon(0);
+ 		}
+ 	}
+ }
+
+void AMystCoreCharacter::SwitchWeaponPrevious()
+{
+	UE_LOG(LogTemp, Warning, TEXT("-1"));
+	if(CurrentWeapon)
+	{
+		if(!ChangeWeapon(CurrentWeaponIndex - 1))
+		{
+			{
+				ChangeWeapon(WeaponActors.Num() - 1);
+			}
+		}
+	}
+}
+
+bool AMystCoreCharacter::ChangeWeapon(int32 WeaponIndex)
+{
+	if(WeaponIndex < 0) return false;
+	if(WeaponIndex > WeaponActors.Num() - 1) return false;
+	if(AWeaponBase* DifferentWeapon = WeaponActors[WeaponIndex])
+	{
+		if(!CurrentWeapon)
+		{
+			CurrentWeapon = WeaponActors[0];
+		}
+		CurrentWeapon->SetActorHiddenInGame(true);
+		CurrentWeapon = DifferentWeapon;
+		CurrentWeapon->SetActorHiddenInGame(false);
+
+		CurrentWeaponIndex = WeaponIndex;
+
+		return true;
+	}
+	
+	return false;
+	
+}
+
+
+void AMystCoreCharacter::SwitchWeaponNumber(float Val)
+{
+	
 }
 
 void AMystCoreCharacter::OnPrimaryAbility()
@@ -171,51 +222,6 @@ void AMystCoreCharacter::OnLandedThing(const FHitResult& Hit)
 	JumpedFromGround = false;
 }
 
-
-void AMystCoreCharacter::OnFire()
-{
-	// try and fire a projectile
-	if (ProjectileClass != nullptr)
-	{
-		UWorld* const World = GetWorld();
-		if (World != nullptr)
-		{
-			if(ManaComponent->Mana <= 100) return;
-			ManaComponent->SuckMana(100);
-			
-			const FRotator SpawnRotation = GetControlRotation();
-			// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-			const FVector SpawnLocation = ((FP_MuzzleLocation != nullptr)
-				                               ? FP_MuzzleLocation->GetComponentLocation()
-				                               : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
-
-			//Set Spawn Collision Handling Override
-			FActorSpawnParameters ActorSpawnParams;
-			ActorSpawnParams.SpawnCollisionHandlingOverride =
-				ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-			// spawn the projectile at the muzzle
-			World->SpawnActor<AMystCoreProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
-		}
-	}
-
-	// try and play the sound if specified
-	if (FireSound != nullptr)
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
-	}
-
-	// try and play a firing animation if specified
-	if (FireAnimation != nullptr)
-	{
-		// Get the animation object for the arms mesh
-		UAnimInstance* AnimInstance = Mesh1P->GetAnimInstance();
-		if (AnimInstance != nullptr)
-		{
-			AnimInstance->Montage_Play(FireAnimation, 1.f);
-		}
-	}
-}
 
 void AMystCoreCharacter::MoveForward(float Value)
 {
