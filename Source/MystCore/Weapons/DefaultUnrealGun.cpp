@@ -29,16 +29,6 @@ void ADefaultUnrealGun::Tick(float DeltaTime)
 void ADefaultUnrealGun::Fire()
 {
 	Super::Fire();
-	UE_LOG(LogTemp, Warning, TEXT("bRUH"));
-	
-	FActorSpawnParameters ActorSpawnParams;
-	ActorSpawnParams.SpawnCollisionHandlingOverride =
-		ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
-
-	FVector SpawnLocation = SkeletalMesh->GetSocketLocation(FName("Muzzle"));
-	FRotator SpawnRotation = SkeletalMesh->GetSocketRotation(FName("Muzzle"));
-	
-	GetWorld()->SpawnActor<AMystCoreProjectile>(ProjectileClass, SpawnLocation, SpawnRotation, ActorSpawnParams);
 }
 
 

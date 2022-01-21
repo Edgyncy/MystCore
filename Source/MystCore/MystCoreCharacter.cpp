@@ -72,6 +72,7 @@ void AMystCoreCharacter::BeginPlay()
 		AWeaponBase* WeaponBase = GetWorld()->SpawnActor<AWeaponBase>(WeaponClass);
 		WeaponBase->AttachToComponent(Mesh1P, FAttachmentTransformRules::SnapToTargetIncludingScale, SocketName);
 		WeaponBase->SetHidden(true);
+		WeaponBase->SetShooter(GetController());
 		
 		WeaponActors.Add(WeaponBase);
 	}

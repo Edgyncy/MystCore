@@ -3,22 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ProjectileWeapon.h"
 #include "WeaponBase.h"
-#include "GameFramework/Actor.h"
-#include "MystCore/MystCoreProjectile.h"
 #include "DefaultUnrealGun.generated.h"
 
 UCLASS()
-class MYSTCORE_API ADefaultUnrealGun : public AWeaponBase
+class MYSTCORE_API ADefaultUnrealGun : public AProjectileWeapon
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
 	ADefaultUnrealGun();
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AMystCoreProjectile> ProjectileClass = AMystCoreProjectile::StaticClass() ;
 
 protected:
 	// Called when the game starts or when spawned

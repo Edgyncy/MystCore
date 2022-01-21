@@ -30,6 +30,9 @@ void AEnemyCharacter::BeginPlay()
 
 void AEnemyCharacter::OnTakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
+	ACharacter* Character = InstigatedBy->GetCharacter();
+	if(!Character) return;
+	
 	AMystCoreCharacter* MSCharacter = Cast<AMystCoreCharacter>(InstigatedBy->GetCharacter());
 	if(MSCharacter)
 	{

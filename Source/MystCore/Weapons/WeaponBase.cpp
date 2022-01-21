@@ -19,6 +19,12 @@ AWeaponBase::AWeaponBase()
 	
 }
 
+void AWeaponBase::SetShooter(AController* ShooterController)
+{
+	Shooter = ShooterController;
+}
+
+
 // Called when the game starts or when spawned
 void AWeaponBase::BeginPlay()
 {

@@ -15,6 +15,9 @@ class MYSTCORE_API AWeaponBase : public AActor
 
 public:
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite);
+	float Damage = 20.0f;
+
 	//Delegate OnFire
 	UPROPERTY(BlueprintAssignable)
 	FOnFire OnFire;
@@ -29,6 +32,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Appearence)
 	USkeletalMeshComponent* SkeletalMesh;
 
+	/* Weapon Owner */
+	UPROPERTY(BlueprintReadWrite, Category=Appearence)
+	AController* Shooter;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -40,4 +47,6 @@ public:
 	virtual void SetActiveWeapon(bool Val);
 
 	virtual void Fire();
+	
+	virtual void SetShooter(AController* ShooterController);
 };
