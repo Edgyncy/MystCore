@@ -48,8 +48,8 @@ bool ARayTracingWeapon::Raycast(FHitResult& OutHit)
 	FCollisionQueryParams CollisionQueryParams;
 	CollisionQueryParams.AddIgnoredActor(CharacterOwner);
 	
-	bool b = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionQueryParams);
-	DrawDebugCircle(GetWorld(), OutHit.Location, 20.0f, 50.0f, FColor::White, true, 10.0f);
+	bool b = GetWorld()->LineTraceSingleByProfile(OutHit, Start, End, FName("Projectile"), CollisionQueryParams);
+	//DrawDebugCircle(GetWorld(), OutHit.Location, 20.0f, 50.0f, FColor::White, true, 10.0f);
 
 	return b;
 }

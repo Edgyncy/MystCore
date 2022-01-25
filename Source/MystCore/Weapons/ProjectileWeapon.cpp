@@ -26,7 +26,7 @@ void AProjectileWeapon::Fire()
 	
 	FActorSpawnParameters ActorSpawnParams;
 	ActorSpawnParams.SpawnCollisionHandlingOverride =
-		ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+		ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	FVector SpawnLocation = SkeletalMesh->GetSocketLocation(FName("Muzzle"));
 	//FRotator SpawnRotation = SkeletalMesh->GetSocketRotation(FName("Muzzle"));

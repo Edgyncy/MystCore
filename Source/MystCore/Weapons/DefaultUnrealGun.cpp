@@ -28,8 +28,8 @@ void ADefaultUnrealGun::Tick(float DeltaTime)
 
 void ADefaultUnrealGun::Fire()
 {
-	if(CharacterOwner->ManaComponent->Mana <= 100) return;
-	CharacterOwner->ManaComponent->SuckMana(100);
+	//if(CharacterOwner->ManaComponent->Mana <= 100) return;
+	//CharacterOwner->ManaComponent->SuckMana(100);
 	
 	Super::Fire();
 }

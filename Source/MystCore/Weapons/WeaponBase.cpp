@@ -38,6 +38,20 @@ void AWeaponBase::SetActiveWeapon(bool Val)
 	SetActorHiddenInGame(!Val);
 }
 
+void AWeaponBase::StartFire()
+{
+	Fire();
+	if(bAuto)
+	{
+		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &AWeaponBase::Fire, FireRate, true);
+	}
+}
+
+void AWeaponBase::StopFire()
+{
+	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
+}
+
 void AWeaponBase::Fire()
 {
 	OnFire.Broadcast();

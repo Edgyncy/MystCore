@@ -17,6 +17,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite);
 	float Damage = 20.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite);
+	float FireRate = 0.5f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite);
+	bool bAuto = false;
 
 	//Delegate OnFire
 	UPROPERTY(BlueprintAssignable)
@@ -39,6 +45,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	FTimerHandle FireTimerHandle;
 
 public:
 	// Called every frame
@@ -46,6 +54,10 @@ public:
 
 	virtual void SetActiveWeapon(bool Val);
 
+	virtual void StartFire();
+
+	virtual void StopFire();
+	
 	virtual void Fire();
 	
 	virtual void SetShooter(AController* ShooterController);

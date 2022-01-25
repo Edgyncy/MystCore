@@ -7,7 +7,7 @@
 #include "MystCore/Components/HealthComponent.h"
 #include "EnemyCharacter.generated.h"
 
-UCLASS()
+UCLASS(BlueprintType)
 class MYSTCORE_API AEnemyCharacter : public ACharacter
 {
 	GENERATED_BODY()
@@ -19,7 +19,14 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category=Health);
 	UHealthComponent* HealthComponent;
 
+	UPROPERTY(BlueprintReadWrite);
+	AActor* Target;
 	
+	UPROPERTY(BlueprintReadWrite);
+	AController* LastDamageBy;
+
+	UPROPERTY(BlueprintReadWrite);
+	ACharacter* LastDamageCharacterBy;
 
 protected:
 	// Called when the game starts or when spawned

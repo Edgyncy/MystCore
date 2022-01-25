@@ -4,6 +4,7 @@
 #include "EnemyCharacter.h"
 
 #include "EnemyAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "MystCore/MystCoreCharacter.h"
 
 // Sets default values
@@ -30,9 +31,14 @@ void AEnemyCharacter::BeginPlay()
 
 void AEnemyCharacter::OnTakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
+	if (!InstigatedBy) return;
+	LastDamageBy = InstigatedBy;
 	ACharacter* Character = InstigatedBy->GetCharacter();
 	if(!Character) return;
-	
+	LastDamageCharacterBy = Character;
+
+	Cast<AEnemyAIController>(GetController())->GetBlackboardComponent()->SetValueAsObject(FName("Target"), LastDamageCharacterBy);
+		
 	AMystCoreCharacter* MSCharacter = Cast<AMystCoreCharacter>(InstigatedBy->GetCharacter());
 	if(MSCharacter)
 	{

@@ -103,7 +103,8 @@ void AMystCoreCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	//
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMystCoreCharacter::OnFire);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AMystCoreCharacter::OnStartFire);
+	PlayerInputComponent->BindAction("Fire", IE_Released, this, &AMystCoreCharacter::OnStopFire);
 	
 	//
 	PlayerInputComponent->BindAction("SwitchWeaponNext", IE_Pressed, this, &AMystCoreCharacter::SwitchWeaponNext);
@@ -128,9 +129,14 @@ void AMystCoreCharacter::SetupPlayerInputComponent(class UInputComponent* Player
 	PlayerInputComponent->BindAction("SecondaryAbility", IE_Pressed, this, &AMystCoreCharacter::OnSecondaryAbility);
 }
 
-void AMystCoreCharacter::OnFire()
+void AMystCoreCharacter::OnStartFire()
 {
-	CurrentWeapon->Fire();
+	CurrentWeapon->StartFire();
+}
+
+void AMystCoreCharacter::OnStopFire()
+{
+	CurrentWeapon->StopFire();
 }
 
 
