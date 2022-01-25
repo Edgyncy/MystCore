@@ -40,6 +40,7 @@ void UExplosionImpulseComponent::Explode(FExplosionImpulseInfo Info)
 			ACharacter* CharacterReceiver = Cast<ACharacter>(HitActor.GetActor());
 			if (CharacterReceiver)
 			{
+				CharacterReceiver->GetController()->StopMovement();
 				CharacterReceiver->GetMovementComponent()->AddRadialImpulse(
 					Start, Info.Radius, Info.Strength, RIF_Linear, true);
 				continue;
