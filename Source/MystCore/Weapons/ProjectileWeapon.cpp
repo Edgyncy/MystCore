@@ -47,7 +47,13 @@ void AProjectileWeapon::Fire()
 
 void AProjectileWeapon::OnProjectileHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
 {
-	UGameplayStatics::ApplyDamage(OtherActor, Damage, Shooter, SelfActor, NULL);
+	if(!OtherActor) return;
+	if(OtherActor->CanBeDamaged())
+	{
+		UGameplayStatics::ApplyDamage(OtherActor, Damage, Shooter, SelfActor, NULL);
+		SelfActor->Destroy();
+	}
+
 }
 
 
