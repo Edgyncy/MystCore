@@ -33,6 +33,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Appearence)
 	bool bIsActive;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Appearence)
+	USoundBase* FireSound;
 	
 	/* Gun Mesh */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Appearence)

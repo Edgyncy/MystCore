@@ -35,4 +35,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetShooter(AController* ShooterController) override;
+
+	/* Yes, Animation Feature is in RayTracingWeapon.cpp. So What? */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Appearence)
+	UAnimMontage* FireAnimation;
+	
+	virtual void Fire() override;
 };

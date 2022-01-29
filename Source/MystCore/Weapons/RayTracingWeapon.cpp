@@ -36,6 +36,21 @@ void ARayTracingWeapon::SetShooter(AController* ShooterController)
 	CharacterOwner = Character;
 }
 
+void ARayTracingWeapon::Fire()
+{
+	Super::Fire();
+
+	if(FireAnimation)
+	{
+		if(CharacterOwner)
+		{
+			if(UAnimInstance* AnimInstance = CharacterOwner->GetMesh1P()->GetAnimInstance())
+			{
+				AnimInstance->Montage_Play(FireAnimation);
+			}
+		}
+	}
+}
 
 bool ARayTracingWeapon::Raycast(FHitResult& OutHit)
 {

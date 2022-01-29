@@ -3,6 +3,8 @@
 
 #include "WeaponBase.h"
 
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -87,6 +89,7 @@ void AWeaponBase::StopFire()
 void AWeaponBase::Fire()
 {
 	SetupFireDelay(FireRate);
+	UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
 	OnFire.Broadcast();
 }
 
