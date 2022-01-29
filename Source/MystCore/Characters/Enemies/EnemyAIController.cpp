@@ -3,6 +3,7 @@
 
 #include "EnemyAIController.h"
 
+#include "EnemyCharacter.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
@@ -30,6 +31,12 @@ void AEnemyAIController::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus
 {
 	if(Stimulus.WasSuccessfullySensed())
 	{
-		GetBlackboardComponent()->SetValueAsObject(BlackboardTarget, Actor);
+		if(AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(Actor))
+		{
+			
+		}else
+		{
+			GetBlackboardComponent()->SetValueAsObject(BlackboardTarget, Actor);
+		}
 	}
 }

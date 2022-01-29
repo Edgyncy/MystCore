@@ -179,7 +179,7 @@ bool AMystCoreCharacter::ChangeWeapon(int32 WeaponIndex)
 		CurrentWeapon->SetActiveWeapon(false);
 		CurrentWeapon = DifferentWeapon;
 		CurrentWeapon->SetActiveWeapon(true);
-
+		
 		CurrentWeaponIndex = WeaponIndex;
 
 		return true;
