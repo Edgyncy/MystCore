@@ -40,20 +40,53 @@ void AWeaponBase::SetActiveWeapon(bool Val)
 
 void AWeaponBase::StartFire()
 {
-	Fire();
+	//SetupFireDelay(FireRate);
 	if(bAuto)
 	{
-		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &AWeaponBase::Fire, FireRate, true);
+		if(bIsInShootingDelay)
+		{
+			float RemainingTime = GetWorldTimerManager().GetTimerRemaining(FireDelayHandle);
+			UE_LOG(LogTemp, Warning, TEXT("Remaining Time: %f"), RemainingTime)
+			bIsShooting = true;
+			GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &AWeaponBase::Fire, FireRate, true, RemainingTime);
+		}else
+		{
+			bIsShooting = true;
+			GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &AWeaponBase::Fire, FireRate, true);
+		}
 	}
+
+	if(bIsInShootingDelay) return;
+	Fire();
+}
+
+void AWeaponBase::DisableFireDelay()
+{
+	bIsInShootingDelay = false;
+}
+
+void AWeaponBase::EnableFireDelay()
+{
+	bIsInShootingDelay = true;
+}
+
+void AWeaponBase::SetupFireDelay(float Delay)
+{
+	GetWorldTimerManager().ClearTimer(FireDelayHandle);
+	EnableFireDelay();
+	
+	GetWorldTimerManager().SetTimer(FireDelayHandle, this, &AWeaponBase::DisableFireDelay, Delay, false);
 }
 
 void AWeaponBase::StopFire()
 {
+	bIsShooting = false;
 	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
 }
 
 void AWeaponBase::Fire()
 {
+	SetupFireDelay(FireRate);
 	OnFire.Broadcast();
 }
 

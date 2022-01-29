@@ -23,6 +23,7 @@ void AProjectileWeapon::BeginPlay()
 
 void AProjectileWeapon::Fire()
 {
+	Super::Fire();
 	
 	FActorSpawnParameters ActorSpawnParams;
 	ActorSpawnParams.SpawnCollisionHandlingOverride =

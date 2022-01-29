@@ -14,7 +14,7 @@ class MYSTCORE_API AWeaponBase : public AActor
 	GENERATED_BODY()
 
 public:
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite);
 	float Damage = 20.0f;
 	
@@ -42,12 +42,29 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category=Appearence)
 	AController* Shooter;
 
+	bool bIsShooting;
+
+	bool bIsInShootingDelay;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
 	FTimerHandle FireTimerHandle;
 
+private:
+
+	FTimerHandle FireDelayHandle;
+	
+	UFUNCTION()
+	void DisableFireDelay();
+
+	UFUNCTION()
+	void SetupFireDelay(float Delay);
+	
+	UFUNCTION()
+	void EnableFireDelay();
+	
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
