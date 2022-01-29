@@ -38,6 +38,13 @@ void AWeaponBase::SetActiveWeapon(bool Val)
 {
 	bIsActive = Val;
 	SetActorHiddenInGame(!Val);
+	if(bIsActive)
+	{
+		SetupFireDelay(StartDelay);
+	}else
+	{
+		StopFire();
+	}
 }
 
 void AWeaponBase::StartFire()

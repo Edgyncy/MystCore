@@ -21,6 +21,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite);
 	float FireRate = 0.5f;
 
+	float StartDelay = 0.5f;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite);
 	bool bAuto = false;
 
