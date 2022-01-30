@@ -3,12 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "RayTracingWeapon.h"
 #include "WeaponBase.h"
 #include "GameFramework/Actor.h"
 #include "HammerWeapon.generated.h"
 
 UCLASS()
-class MYSTCORE_API AHammerWeapon : public AWeaponBase
+class MYSTCORE_API AHammerWeapon : public ARayTracingWeapon
 {
 	GENERATED_BODY()
 
