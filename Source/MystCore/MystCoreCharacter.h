@@ -6,6 +6,7 @@
 #include "Abilities/CastService.h"
 #include "Components/HealthComponent.h"
 #include "Components/ManaComponent.h"
+#include "Components/WalletComponent.h"
 #include "GameFramework/Character.h"
 #include "Weapons/WeaponBase.h"
 #include "MystCoreCharacter.generated.h"
@@ -20,6 +21,7 @@ class UAnimMontage;
 class USoundBase;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDealDamage, float, DamageAmount, AActor*, Victim);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnKillEnemy, AActor*, Victim);
 
 UCLASS(BlueprintType, config=Game)
 class AMystCoreCharacter : public ACharacter
@@ -47,9 +49,13 @@ public:
 
 	/* Events */
 
-	/* On Character Deal Damage (should be broadcasted outside this class wtf0 */
+	/* On Character Deal Damage (should be broadcasted outside this class wtf) */
 	UPROPERTY(BlueprintAssignable)
 	FOnDealDamage OnDealDamage;
+
+	/* On Character Kill Enemy (should be broadcasted outside this class wtf) */
+	UPROPERTY(BlueprintAssignable)
+	FOnKillEnemy OnKillEnemy;
 
 protected:
 	virtual void BeginPlay();
@@ -58,6 +64,7 @@ protected:
 
 public:
 
+	// Weapons Section
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Weapon)
 	int32 CurrentWeaponIndex;
 	
@@ -73,6 +80,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Weapon)
 	TArray<AWeaponBase*> WeaponActors;
 
+	//
+
+	// Wallet
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Wallet);
+	UWalletComponent* WalletComponent;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float DefaultFOV = 110;
 

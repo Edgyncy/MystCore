@@ -26,7 +26,7 @@ void AEnemyCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	OnTakeAnyDamage.AddDynamic(this, &AEnemyCharacter::OnTakeDamage);
-	
+	HealthComponent->OnZeroHealth.AddDynamic(this, &AEnemyCharacter::OnDeath);
 }
 
 void AEnemyCharacter::OnTakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
@@ -45,6 +45,17 @@ void AEnemyCharacter::OnTakeDamage(AActor* DamagedActor, float Damage, const cla
 		MSCharacter->OnDealDamage.Broadcast(Damage, this);
 	}
 }
+
+void AEnemyCharacter::OnDeath()
+{
+	AMystCoreCharacter* MSCharacter = Cast<AMystCoreCharacter>(LastDamageCharacterBy);
+	if(MSCharacter)
+	{
+		MSCharacter->OnKillEnemy.Broadcast(this);
+		MSCharacter->WalletComponent->AddScrap(100);
+	}
+}
+
 
 
 // Called every frame
