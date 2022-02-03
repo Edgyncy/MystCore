@@ -24,15 +24,15 @@ public:
 
 	// Current Currency Amount
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Scrap;
+	int64 Scrap;
 
 	// To add currency
 	UFUNCTION()
-	void AddScrap(float Amount);
+	void AddScrap(int64 Amount);
 
 	// To remove currency
 	UFUNCTION()
-	void RemoveScrap(float Amount);
+	void RemoveScrap(int64 Amount);
 
 protected:
 	// Called when the game starts

@@ -15,15 +15,15 @@ void UWalletComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
-void UWalletComponent::AddScrap(float Amount)
+void UWalletComponent::AddScrap(int64 Amount)
 {
-	Scrap += FMath::Clamp(Amount, 0.0f, 1000000000.0f);;
+	Scrap += Amount;
 	OnWalletUpdate.Broadcast();
 }
 
-void UWalletComponent::RemoveScrap(float Amount)
+void UWalletComponent::RemoveScrap(int64 Amount)
 { 
-	Scrap -= FMath::Clamp(Amount, 0.0f, 1000000000.0f);
+	Scrap -= Amount;
 	OnWalletUpdate.Broadcast();
 }
 
