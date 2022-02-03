@@ -19,6 +19,11 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category=Health);
 	UHealthComponent* HealthComponent;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere);
+	int MaxScrap;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere);
+	int MinScrap;
+	
 	UPROPERTY(BlueprintReadWrite);
 	AActor* Target;
 	

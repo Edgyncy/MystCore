@@ -52,7 +52,7 @@ void AEnemyCharacter::OnDeath()
 	if(MSCharacter)
 	{
 		MSCharacter->OnKillEnemy.Broadcast(this);
-		MSCharacter->WalletComponent->AddScrap(100);
+		
 	}
 }
 
