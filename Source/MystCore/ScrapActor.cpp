@@ -5,6 +5,7 @@
 
 #include "DrawDebugHelpers.h"
 #include "Components/WalletComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 
 // Sets default values
@@ -23,7 +24,6 @@ AScrapActor::AScrapActor()
 
 	PickupCollision = CreateDefaultSubobject<USphereComponent>("Pickup Collision");
 	PickupCollision->SetupAttachment(StaticMesh);
-	
 }
 
 
@@ -82,6 +82,30 @@ void AScrapActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 	}
 	
 }
+
+void AScrapActor::CreateBurst(TSubclassOf<AScrapActor> ScrapType, float Amount, UWorld* World, FVector Location)
+{
+	int ObjectsAmount = FMath::RandRange(3, 10);
+
+	float AmountPerScrap = Amount / ObjectsAmount;
+
+	for(int count = 0; count < ObjectsAmount; count++)
+	{
+		FActorSpawnParameters params;
+		params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	
+		AScrapActor* Scrap = World->SpawnActor<AScrapActor>(ScrapType, Location, UKismetMathLibrary::RandomRotator(), params);
+		Scrap->ScrapHas = AmountPerScrap;
+
+		UStaticMeshComponent* ScrapStaticMesh = Scrap->StaticMesh;
+	
+		ScrapStaticMesh->SetAllPhysicsLinearVelocity(ScrapStaticMesh->GetForwardVector() * 1000);
+	}
+
+	
+	
+}
+
 
 // Called every frame
 void AScrapActor::Tick(float DeltaTime)

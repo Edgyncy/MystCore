@@ -52,8 +52,10 @@ void AEnemyCharacter::OnDeath()
 	if(MSCharacter)
 	{
 		MSCharacter->OnKillEnemy.Broadcast(this);
-		
 	}
+	int Amount = FMath::RandRange(MinScrap, MaxScrap);
+
+	AScrapActor::CreateBurst(ScrapDefaultClass, Amount, GetWorld(), GetActorLocation());
 }
 
 

@@ -69,5 +69,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	static void CreateBurst(float Amount);
+	static void CreateBurst(TSubclassOf<AScrapActor> ScrapType, float Amount, UWorld* World, FVector Location);
 };

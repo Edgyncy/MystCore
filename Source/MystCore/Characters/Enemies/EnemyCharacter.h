@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "MystCore/ScrapActor.h"
 #include "MystCore/Components/HealthComponent.h"
 #include "EnemyCharacter.generated.h"
 
@@ -20,15 +21,18 @@ public:
 	UHealthComponent* HealthComponent;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere);
-	int MaxScrap;
+	int32 MaxScrap;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere);
-	int MinScrap;
+	int32 MinScrap;
 	
 	UPROPERTY(BlueprintReadWrite);
 	AActor* Target;
 	
 	UPROPERTY(BlueprintReadWrite);
 	AController* LastDamageBy;
+
+	UPROPERTY(EditAnywhere);
+	TSubclassOf<AScrapActor> ScrapDefaultClass = AScrapActor::StaticClass();
 
 	UPROPERTY(BlueprintReadWrite);
 	ACharacter* LastDamageCharacterBy;
