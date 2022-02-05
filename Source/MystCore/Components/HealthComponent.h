@@ -38,6 +38,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Regeneration);
 	float RegenerationSpeed = 1;
 
+	/** Adding Health **/
+	UFUNCTION()
+	void AddHealth(float Amount);
+
+	/** Removing Health **/
+	UFUNCTION()
+	void RemoveHealth(float Amount);
+
 protected:
 
 	// Timer that regenerates health
@@ -58,14 +66,6 @@ protected:
 	/** Sets bCanRegenerate bool which specifies ability of the character to regenerate health **/
 	UFUNCTION()
 	void SetCanRegenerate(bool CanRegenerate);
-
-	/** Adding Health **/
-	UFUNCTION()
-	void AddHealth(float Amount);
-
-	/** Removing Health **/
-	UFUNCTION()
-    void RemoveHealth(float Amount);
 
 	/** Reloads Regeneration Timer (If bCanRegenerate has been changed)**/
 	UFUNCTION()
