@@ -41,8 +41,9 @@ void AScrapActor::PickupScrap(UWalletComponent* WalletComponent, AActor* ToWho)
 
 	PickUpWallet = WalletComponent;
 	PickUpActor = ToWho;
-
+	
 	StaticMesh->SetSimulatePhysics(false);
+	StaticMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	StaticMesh->SetEnableGravity(false);
 
 	StartAnimationLocation = StaticMesh->GetComponentLocation();

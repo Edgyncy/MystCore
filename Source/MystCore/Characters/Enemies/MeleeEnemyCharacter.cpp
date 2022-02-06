@@ -17,6 +17,13 @@ void AMeleeEnemyCharacter::HandPunch()
 	GetWorldTimerManager().SetTimer(unused, this, &AMeleeEnemyCharacter::SetupCollisions, CollisionDetectionDelay, false);
 }
 
+void AMeleeEnemyCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	ActorDamagedBuffer.Empty();
+}
+
+
 void AMeleeEnemyCharacter::SetupCollisions()
 {
 	for(auto &Socket : HandSockets)
@@ -48,6 +55,10 @@ void AMeleeEnemyCharacter::DeleteAllCollisions()
 	InPunch = false;
 }
 
+void AMeleeEnemyCharacter::RemoveActorFromTheBuffer(AActor* ActorToRemove)
+{
+	ActorDamagedBuffer.Remove(ActorToRemove);
+}
 
 
 void AMeleeEnemyCharacter::OnPunchCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
@@ -56,12 +67,15 @@ void AMeleeEnemyCharacter::OnPunchCollision(UPrimitiveComponent* OverlappedCompo
 		return;
 	}
 	
-	UE_LOG(LogTemp, Warning, TEXT("%s"), OtherActor);
 	if(!OtherActor) return;
 
-	if(OtherActor->CanBeDamaged())
+	if(OtherActor->CanBeDamaged() && !ActorDamagedBuffer.Contains(OtherActor))
 	{
+		ActorDamagedBuffer.Add(OtherActor);
 		UGameplayStatics::ApplyDamage(OtherActor, MeleeDamage, GetInstigatorController(), this, nullptr);
+		FTimerHandle unusedshit;
+		FTimerDelegate RemoveActorWithDelayThing = FTimerDelegate::CreateUObject(this, &AMeleeEnemyCharacter::RemoveActorFromTheBuffer, OtherActor);
+		GetWorldTimerManager().SetTimer(unusedshit, RemoveActorWithDelayThing, DamageCooldownPerActor, false);
 	}
 	
 }

@@ -80,8 +80,7 @@ void UHealthComponent::TakeDamage(AActor* DamagedActor, float Damage, const UDam
 	{
 		return;
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("Damaged: %f"), Damage)
+	
 	RemoveHealth(Damage);
 	RegenerationRestart(HealthRegenerationDelay);
 	

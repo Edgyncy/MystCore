@@ -39,11 +39,22 @@ public:
 
 protected:
 
+	virtual void BeginPlay() override;
+
+	UPROPERTY(BlueprintReadOnly)
+	TArray<AActor*> ActorDamagedBuffer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float DamageCooldownPerActor = 0.2f;
+
 	UPROPERTY(BlueprintReadOnly)
 	bool InPunch = false;
 
 	UFUNCTION()
 	void SetupCollisions();
+
+	UFUNCTION()
+	void RemoveActorFromTheBuffer(AActor* ActorToRemove);
 
 	UFUNCTION()
 	void DeleteAllCollisions();

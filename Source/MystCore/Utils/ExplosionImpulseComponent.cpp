@@ -32,27 +32,31 @@ void UExplosionImpulseComponent::Explode(FExplosionImpulseInfo Info)
 
 	//DrawDebugSphere(GetWorld(), Start, Info.Radius, 50, FColor::Orange, true);
 
-	if (bSweepHit)
+	if (!bSweepHit) return;
+	
+	TArray<AActor*> HasBeenHit;
+	for (auto& HitActor : HitActors)
 	{
-		for (auto& HitActor : HitActors)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Character Hit"))
-			ACharacter* CharacterReceiver = Cast<ACharacter>(HitActor.GetActor());
-			if (CharacterReceiver)
-			{
-				CharacterReceiver->GetController()->StopMovement(); 
-				CharacterReceiver->GetMovementComponent()->AddRadialImpulse(
-					Start, Info.Radius, Info.Strength, RIF_Linear, true);
-				continue;
-			}
+		if (!HitActor.GetActor()) continue;
 
-			if(!HitActor.GetActor()) continue;
-			UStaticMeshComponent* Receiver = Cast<UStaticMeshComponent>(HitActor.GetActor()->GetRootComponent());
-			if (Receiver)
-			{
-				Receiver->AddRadialImpulse(Start, Info.Radius, Info.Strength, RIF_Linear, true);
-				continue;
-			}
+		if (HasBeenHit.Contains(HitActor.GetActor())) continue;
+		HasBeenHit.Add(HitActor.GetActor());
+
+		UE_LOG(LogTemp, Warning, TEXT("Character Hit"))
+		ACharacter* CharacterReceiver = Cast<ACharacter>(HitActor.GetActor());
+		if (CharacterReceiver)
+		{
+			CharacterReceiver->GetController()->StopMovement();
+			CharacterReceiver->GetMovementComponent()->AddRadialImpulse(
+				Start, Info.Radius, Info.Strength, RIF_Linear, true);
+			continue;
+		}
+
+		UStaticMeshComponent* Receiver = Cast<UStaticMeshComponent>(HitActor.GetActor()->GetRootComponent());
+		if (Receiver)
+		{
+			Receiver->AddRadialImpulse(Start, Info.Radius, Info.Strength, RIF_Linear, true);
+			continue;
 		}
 	}
 }
