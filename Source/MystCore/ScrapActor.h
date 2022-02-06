@@ -25,6 +25,9 @@ public:
 	AScrapActor();
 
 	EScrapActorState ScrapState = Lies;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Appearence)
+	USoundBase* ScrapSound;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Appearence)
 	UStaticMeshComponent* StaticMesh;

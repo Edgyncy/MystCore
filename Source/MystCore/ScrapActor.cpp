@@ -5,6 +5,7 @@
 
 #include "DrawDebugHelpers.h"
 #include "Components/WalletComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -62,6 +63,7 @@ void AScrapActor::PickupAnimationTimer()
 
 	if(LerpAlpha >= 1.0f)
 	{
+		UGameplayStatics::PlaySoundAtLocation(this, ScrapSound, GetActorLocation());
 		PickUpWallet->AddScrap(ScrapHas);
 		GetWorldTimerManager().ClearTimer(PickupTimer);
 		Destroy();
