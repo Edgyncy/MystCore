@@ -27,7 +27,7 @@ protected:
 	UPROPERTY()
 	AMystCoreCharacter* CharacterOwner;
 	
-	bool Raycast(FHitResult& OutHit);
+	virtual bool Raycast(FHitResult& OutHit);
 
 	
 public:
