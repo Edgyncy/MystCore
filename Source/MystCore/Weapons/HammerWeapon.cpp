@@ -24,6 +24,7 @@ void AHammerWeapon::BeginPlay()
 
 void AHammerWeapon::Fire()
 {
+	if(CurrentStructure->bOverlapping) return;
 	if(CurrentStructure) CurrentStructure->PlaceStructure();
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -54,7 +55,11 @@ FVector AHammerWeapon::BuildPreviewLocation()
 {
 	FHitResult OutHit;
 	Raycast(OutHit);
-	return OutHit.Location;
+
+	FVector End = OutHit.Location;
+	End.Z += 1;
+	
+	return End;
 }
 
 
@@ -76,28 +81,32 @@ bool AHammerWeapon::Raycast(FHitResult& OutHit)
 	CollisionQueryParams.AddIgnoredActor(CurrentStructure);
 	CollisionQueryParams.AddIgnoredActor(CharacterOwner);
 	
-	bool b = GetWorld()->LineTraceSingleByProfile(OutHit, Start, End, FName("Visibility"), CollisionQueryParams);
+	FCollisionObjectQueryParams cobqp;
+	cobqp.AddObjectTypesToQuery(ECC_WorldStatic);
 
+	bool b = GetWorld()->LineTraceSingleByObjectType(OutHit, Start, End, cobqp, CollisionQueryParams);
+	
 	FHitResult OutHitToGround;
 	bool bG = false;
 	//Raycast to the Ground
 	if(b)
 	{
+		
 		FVector StartG = OutHit.Location;
 		StartG.Z += 500;
 
 		FVector EndG = OutHit.Location;
 		EndG.Z -= 50;
 		
-		bG = GetWorld()->LineTraceSingleByProfile(OutHitToGround, StartG, EndG, FName("Visibility"), CollisionQueryParams);
-	}else
-	{
+		bG = GetWorld()->LineTraceSingleByObjectType(OutHitToGround, StartG, EndG, cobqp, CollisionQueryParams);
+	}else{
+		
 		FVector StartG = OutHit.TraceEnd;
 
 		FVector EndG = OutHit.TraceEnd;
 		EndG.Z -= RayTracingDistance;
 		
-		bG = GetWorld()->LineTraceSingleByProfile(OutHitToGround, StartG, EndG, FName("Visibility"), CollisionQueryParams);
+		bG = GetWorld()->LineTraceSingleByObjectType(OutHitToGround, StartG, EndG, cobqp, CollisionQueryParams);
 	}
 
 	OutHit = OutHitToGround;

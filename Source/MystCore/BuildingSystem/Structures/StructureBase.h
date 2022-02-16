@@ -21,10 +21,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Appearence)
 	UMaterialInterface* PreviewMaterial;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Appearence)
+	UMaterialInterface* PreviewCantPlaceMaterial;
+
 	virtual void PlaceStructure();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly);
 	bool bStructureActive = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly);
+	bool bPlaced = false;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly);
+	bool bOverlapping = false;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -36,4 +46,10 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION()
+	virtual void OverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+
+	UFUNCTION()
+	virtual void OverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 };

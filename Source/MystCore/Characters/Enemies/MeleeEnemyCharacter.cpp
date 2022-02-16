@@ -77,6 +77,5 @@ void AMeleeEnemyCharacter::OnPunchCollision(UPrimitiveComponent* OverlappedCompo
 		FTimerDelegate RemoveActorWithDelayThing = FTimerDelegate::CreateUObject(this, &AMeleeEnemyCharacter::RemoveActorFromTheBuffer, OtherActor);
 		GetWorldTimerManager().SetTimer(unusedshit, RemoveActorWithDelayThing, DamageCooldownPerActor, false);
 	}
-	
-}
 
+};
