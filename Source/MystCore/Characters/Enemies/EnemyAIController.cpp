@@ -6,6 +6,8 @@
 #include "EnemyCharacter.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "MystCore/DragonCore.h"
 
 // Sets default values
 AEnemyAIController::AEnemyAIController()
@@ -25,6 +27,13 @@ void AEnemyAIController::BeginPlay()
 	PerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &AEnemyAIController::OnPerceptionUpdated);
 
 	RunBehaviorTree(BehaviorTree);
+
+	TArray<AActor*> DragonCoreActors;
+	UGameplayStatics::GetAllActorsOfClass(this, ADragonCore::StaticClass(), DragonCoreActors);
+
+	if(DragonCoreActors.Max() == 0) return;
+	
+	GetBlackboardComponent()->SetValueAsObject(BlackboardTarget, DragonCoreActors[0]);
 }
 
 void AEnemyAIController::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)

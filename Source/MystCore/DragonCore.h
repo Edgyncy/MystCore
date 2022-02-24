@@ -15,6 +15,9 @@ class MYSTCORE_API ADragonCore : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ADragonCore();
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	USkeletalMeshComponent* SkeletalMesh;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UHealthComponent* HealthComponent;

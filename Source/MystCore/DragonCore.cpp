@@ -10,8 +10,10 @@ ADragonCore::ADragonCore()
 	PrimaryActorTick.bCanEverTick = false;
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>("Root Component");
-
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>("Health Component");
+
+	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>("SkeletalMesh");
+	SkeletalMesh->SetRelativeLocation(FVector(0,0,0));
 
 }
 
